@@ -201,7 +201,7 @@ set -o errtrace
 set -o errexit
 
 CHPHAROS_INSTALLER_VERSION="0.3.0"
-CHPHAROS_TARBALL_URL="https://github.com/kontena/chpharos/archive/0.6.0.tar.gz"
+CHPHAROS_TARBALL_URL="https://github.com/kontena/chpharos/archive/0.6.1.tar.gz"
 PREFIX="${PREFIX:-/usr/local}"
 
 error_echo() {
@@ -216,12 +216,7 @@ CHPHAROS_INSTALLER_WEB_CLIENT="$(basename "$(command -v curl || command -v wget 
 [ "${CHPHAROS_INSTALLER_WEB_CLIENT}" = "none" ] && error_echo "curl or wget required" && exit 1
 
 install_chpharos() {
-  if [ -z "${NO_BREW}" ] && uname -s | grep -q Darwin && command -v brew &> /dev/null; then
-    echo "Using homebrew to install chpharos. Use -s to force installation from sources"
-    exec brew install kontena/chpharos/chpharos
-  else
-    install_from_tarball
-  fi
+  install_from_tarball
 }
 
 post_install_message() {
@@ -317,7 +312,6 @@ EOF
 
 while getopts 'hdswVv:p:' opt; do
   case "$opt" in
-    s) NO_BREW="true" ;;
     d) DEBUG="true" ;;
     w) CHPHAROS_INSTALLER_WEB_CLIENT="wget" ;;
     v)
@@ -335,7 +329,6 @@ while getopts 'hdswVv:p:' opt; do
 done
 
 debug_echo "DEBUG=${DEBUG}"
-debug_echo "NO_BREW=${NO_BREW}"
 debug_echo "CHPHAROS_INSTALLER_WEB_CLIENT=${CHPHAROS_INSTALLER_WEB_CLIENT}"
 debug_echo "CHPHAROS_INSTALLER_VERSION=${CHPHAROS_INSTALLER_VERSION}"
 debug_echo "CHPHAROS_TARBALL_URL=${CHPHAROS_TARBALL_URL}"
